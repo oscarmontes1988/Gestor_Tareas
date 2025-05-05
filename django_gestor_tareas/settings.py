@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'coreapi',
     'gestor_tareas'
 ]
 
@@ -128,3 +127,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS AUTHORIZATION
 CORS_ALLOWED_ORIGINS = []
+
