@@ -3,35 +3,31 @@
   color: white;
 } */
 
-:root {
-  --color-fondo: #202020;
-  --color-texto: #ffffff;
-  --color-encabezado: #333333;
-  --color-borde: #444444;
-  --color-seleccionado: #555555;
+.task-table-container {
+  padding: 20px;
+  overflow-x: auto;
 }
 
-.tabla-tareas {
+.task-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: var(--color-fondo);
-  color: var(--color-texto);
+  margin: 20px 0;
 }
 
-.tabla-tareas th, .tabla-tareas td {
-  border: 1px solid var(--color-borde);
-  padding: 10px;
+.task-table th, .task-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
   text-align: left;
 }
 
-.tabla-tareas th {
-  background-color: var(--color-encabezado);
+.task-table th {
+  background-color: #f2f2f2;
 }
 
-.tabla-tareas tr:hover {
-  background-color: var(--color-seleccionado);
+.task-table tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
-.tabla-tareas tr:hover td {
-  color: var(--color-texto);
+.task-table tr:hover {
+  background-color: #f1f1f1;
 }
