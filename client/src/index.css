@@ -65,49 +65,63 @@
   background-color: #f1f5f9;
   color: #1d4ed8;
 }
-
-.task-form-container {
-  max-width: 500px;
+.form-container {
+  max-width: 600px;
   margin: 2rem auto;
+  background-color: #f9f9f9;
   padding: 2rem;
-  background-color: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
-.task-form-container form {
+.task-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.task-form-container input,
-.task-form-container textarea {
-  padding: 0.75rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
+.task-form input[type="text"],
+.task-form textarea,
+.task-form input[type="datetime-local"],
+.task-form select {
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   font-size: 1rem;
   width: 100%;
 }
 
-.task-form-container span {
+.task-form span {
   color: red;
   font-size: 0.9rem;
 }
 
-.task-form-container button {
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
+.task-form button {
+  padding: 0.8rem;
   background-color: #2563eb;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.3s ease;
 }
 
-.task-form-container button:hover {
-  background-color: #1e40af;
+.task-form button:hover {
+  background-color: #4D4D4D;
+}
+
+button[type="button"] {
+  padding: 0.6rem;
+  background-color: #e53935;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button[type="button"]:hover {
+  background-color: #c62828;
 }
 
