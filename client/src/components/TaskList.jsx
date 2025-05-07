@@ -1,159 +1,171 @@
-// import { useEffect, useState } from "react";
-// import { getAllTasks } from "../api/tasks.api";
-// import { TaskCard } from "./TaskCard";
-
-// export function TasksList() {
-//     const [tasks, setTasks] = useState([]);
-
-//     useEffect(() => {
-//        async function loadTasks() {
-//         const res = await getAllTasks()
-//         setTasks(res.data);
-//        }
-//        loadTasks();
-//     }, []);
-
-//     return (
-//      <div>
-//         {tasks.map((task) => (
-//             <TaskCard key={task.id} task={task} />
-//         ))}
-//         </div>
-//     );
-// }
-
-// import { useEffect, useState } from "react";
-// import { getAllTasks, getTaskById, updateTask, deleteTask } from "../api/tasks.api";
-
-// export function TasksList() {
-//     const [tasks, setTasks] = useState([]);
-
-//     const loadTasks = async () => {
-//         const res = await getAllTasks();
-//         setTasks(res.data);
-//     };
-
-//     useEffect(() => {
-//         loadTasks();
-//     }, []);
-
-//     const handleEditTask = async (taskId) => {
-//         const res = await getTaskById(taskId);
-//         const task = res.data;
-//         const newTitle = prompt('Ingrese el nuevo título:', task.title);
-//         const newDescription = prompt('Ingrese la nueva descripción:', task.description);
-//         if (newTitle && newDescription) {
-//             await updateTask(taskId, { title: newTitle, description: newDescription });
-//             await loadTasks();
-//         }
-//     };
-
-//     const handleDeleteTask = async (taskId) => {
-//         await deleteTask(taskId);
-//         await loadTasks();
-//     };
-
-//     return (
-//         <div className="task-table-container">
-//             <table className="task-table">
-//                 <thead>
-//                     <tr>
-//                         <th>Título</th>
-//                         <th>Descripción</th>
-//                         <th>Completada</th>
-//                         <th>Acciones</th>
-//                     </tr>
-//                 </thead>
-//                 <tbody>
-//                     {tasks.map((task, index) => (
-//                         <tr key={index}>
-//                             <td>{task.title}</td>
-//                             <td>{task.description}</td>
-//                             <td>{task.done ? "✔️" : "❌"}</td>
-//                             <td>
-//                                 <button onClick={() => handleEditTask(task.id)}>Editar</button>
-//                                 <button onClick={() => handleDeleteTask(task.id)}>Eliminar</button>
-//                             </td>
-//                         </tr>
-//                     ))}
-//                 </tbody>
-//             </table>
-//         </div>
-//     );
-// }
-
 import { useEffect, useState } from "react";
-import { getAllTasks, updateTask, deleteTask } from "../api/tasks.api"; // Asegúrate de que las funciones estén bien importadas
+import { getAllTasks, deleteTask } from "../api/tasks.api"; // Asegúrate de que las funciones estén bien importadas
+import { useNavigate } from "react-router-dom";
 
 export function TaskList() {
-    const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedDateFilter, setSelectedDateFilter] = useState("");
+  const navigate = useNavigate();
 
-    // Define la función loadTasks fuera de useEffect para poder usarla en otros lugares
-    const loadTasks = async () => {
-        const res = await getAllTasks();
-        setTasks(res.data);
-    };
+  // Define la función loadTasks fuera de useEffect para poder usarla en otros lugares
+  const loadTasks = async () => {
+    const res = await getAllTasks();
+    setTasks(res.data);
+  };
 
-    useEffect(() => {
-        loadTasks();
-    }, []);
+  useEffect(() => {
+    loadTasks();
+  }, []);
 
-    const handleEditTask = async (taskId) => {
-        const newTitle = prompt('Ingrese el nuevo título:', taskId.title);
-        const newDescription = prompt('Ingrese la nueva descripción:', taskId.description);
-        const newPriority = prompt('Ingrese la nueva prioridad:', taskId.priority); // Pide la prioridad
-        const newStatus = prompt('Ingrese el nuevo estado:', taskId.status); // Pide el estado
-        const newDueDate = prompt('Ingrese la nueva fecha de vencimiento:', taskId.due_date); // Pide la fecha de vencimiento
-
-        // Aquí es donde podrías formatear la fecha
-        const formattedDate = new Date(newDueDate).toISOString().split('T')[0];
-
-        await updateTask(taskId, {
-            title: newTitle,
-            description: newDescription,
-            priority: newPriority,
-            status: newStatus,
-            due_date: formattedDate 
-        });
-
-        loadTasks();
-    }; 
-
-    const handleDeleteTask = async (taskId) => {
-        await deleteTask(taskId);
-        loadTasks();
-    };
-
-    return (
-        <div className="task-table-container">
-            <table className="task-table">
-                <thead>
-                    <tr>
-                        <th>Título</th>
-                        <th>Descripción</th>
-                        <th>Prioridad</th>
-                        <th>Estado</th>
-                        <th>Fecha de Vencimiento</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {tasks.map((task, index) => (
-                        <tr key={index}>
-                            <td>{task.title}</td>
-                            <td>{task.description}</td>
-                            <td>{task.priority}</td>
-                            <td>{task.status}</td>
-                            {/* <td>{task.due_date ? new Date(task.due_date).toLocaleString() : 'No especificado'}</td> */}
-                            <td>{task.due_date ? new Date(task.due_date).toISOString().split('T')[0] : 'No especificado'}</td>
-                            <td>
-                                <button onClick={() => handleEditTask(task.id)}>Editar</button>
-                                <button onClick={() => handleDeleteTask(task.id)}>Eliminar</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+  const handleDeleteTask = async (taskId, taskTitle) => {
+    const confirmDelete = window.confirm(
+      `¿Está seguro que desea eliminar el registro con ID: ${taskId} y Nombre de tarea: "${taskTitle}"?`
     );
+
+    if (!confirmDelete) return;
+
+    await deleteTask(taskId);
+    loadTasks();
+  };
+
+  const filterAndSortTasks = () => {
+    let filteredTasks = tasks;
+
+    // Filtro por estado
+    if (selectedStatus) {
+      filteredTasks = filteredTasks.filter(
+        (task) => task.status === selectedStatus
+      );
+    }
+
+    // Orden por fecha
+    if (selectedDateFilter === "mas_recientes") {
+      filteredTasks = [...filteredTasks].sort(
+        (a, b) => new Date(b.due_date) - new Date(a.due_date)
+      );
+    } else if (selectedDateFilter === "mas_antiguos") {
+      filteredTasks = [...filteredTasks].sort(
+        (a, b) => new Date(a.due_date) - new Date(b.due_date)
+      );
+    }
+
+    return filteredTasks;
+  };
+
+  const displayedTasks = filterAndSortTasks();
+
+  return (
+    <div className="task-table-container">
+      <div className="filtros-container">
+        <div className="filtro-estado">
+          <label htmlFor="statusFilter" className="filtro-label">
+            Filtrar por estado:
+          </label>
+          <select
+            id="statusFilter"
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            className="filtro-select"
+          >
+            <option value="">Todos</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="en progreso">En Progreso</option>
+            <option value="completada">Completada</option>
+          </select>
+        </div>
+
+        <div className="filtro-fecha">
+          <label htmlFor="dateFilter" className="filtro-label">
+             Ordenar por fecha: 
+          </label>
+          <select
+            id="dateFilter"
+            value={selectedDateFilter}
+            onChange={(e) => setSelectedDateFilter(e.target.value)}
+            className="filtro-select"
+          >
+            <option value="">Sin orden</option>
+            <option value="mas_recientes">Más Recientes</option>
+            <option value="mas_antiguos">Más Antiguos</option>
+          </select>
+        </div>
+      </div>
+
+      <table className="task-table">
+        <thead>
+          <tr>
+            <th className="table-header">Nombre de la tarea</th>
+            <th className="table-header">Descripción</th>
+            <th className="table-header">Fecha de Vencimiento</th>
+            <th className="table-header">Prioridad</th>
+            <th className="table-header">Estado</th>
+            <th className="table-header">Categoría</th>
+            <th className="table-header">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {displayedTasks.map((task, index) => (
+            <tr key={index}>
+              <td className="table-cell">{task.title}</td>
+              <td className="table-cell">{task.description}</td>
+              <td className="table-cell">
+                {task.due_date
+                  ? new Date(task.due_date).toISOString().split("T")[0]
+                  : "No especificado"}
+              </td>
+              <td className="table-cell">{task.priority}</td>
+              <td
+                className={
+                  task.status === "pendiente"
+                    ? "estado-rojo"
+                    : task.status === "en progreso"
+                    ? "estado-amarillo"
+                    : task.status === "completada"
+                    ? "estado-verde"
+                    : ""
+                }
+              >
+                {task.status}
+              </td>
+              <td
+                className={
+                  task.category?.trim().toLowerCase() === "urgente e importante"
+                    ? "categoria-roja"
+                    : task.category?.trim().toLowerCase() ===
+                      "urgente y no importante"
+                    ? "categoria-naranja"
+                    : task.category?.trim().toLowerCase() ===
+                      "no urgente, pero importante"
+                    ? "categoria-amarilla"
+                    : task.category?.trim().toLowerCase() ===
+                      "no urgente y no importante"
+                    ? "categoria-verde"
+                    : ""
+                }
+              >
+                {task.category}
+              </td>
+
+              <td>
+                <button
+                  onClick={() => navigate(`/tasks/edit/${task.id}`)}
+                  className="btn-editar"
+                >
+                  Editar
+                </button>
+                <button
+                  onClick={() => handleDeleteTask(task.id, task.title)}
+                  className="btn-eliminar"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
