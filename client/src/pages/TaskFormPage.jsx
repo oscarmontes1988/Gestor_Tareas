@@ -19,7 +19,7 @@ export function TaskFormPage() {
         due_date: data.due_date,
         priority: data.priority,
         status: data.status,
-        // category: data.category,
+        category: data.category,
       };
 
       await createTask(taskData);
@@ -71,7 +71,7 @@ export function TaskFormPage() {
         </select>
         {errors.status && <span>El estado es requerido</span>}
 
-        {/* <select {...register("category", { required: true })}>
+        <select {...register("category", { required: true })}>
           <option value="">Selecciona categoría</option>
           <option value="urgente e importante">Urgente e importante</option>
           <option value="urgente y no importante">
@@ -84,7 +84,7 @@ export function TaskFormPage() {
             No urgente y no importante
           </option>
         </select>
-        {errors.category && <span>La categoría es requerida</span>} */}
+        {errors.category && <span>La categoría es requerida</span>}
 
         <button type="submit">Guardar</button>
       </form>

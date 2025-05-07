@@ -13,10 +13,10 @@ from django.db import models
 
 class Task(models.Model):
     CATEGORY_CHOICES = [
-        ('urgente_importante', 'Urgente e Importante'),
-        ('urgente_no_importante', 'Urgente y No Importante'),
-        ('no_urgente_importante', 'No Urgente, pero Importante'),
-        ('no_urgente_no_importante', 'No Urgente y No Importante'),
+        ('urgente e importante', 'Urgente e Importante'),
+        ('urgente y no importante', 'Urgente y No Importante'),
+        ('no urgente, pero importante', 'No Urgente, pero Importante'),
+        ('no urgente y no importante', 'No Urgente y No Importante'),
     ]
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
@@ -26,7 +26,7 @@ class Task(models.Model):
     category = models.CharField(
         max_length=30,
         choices=CATEGORY_CHOICES,
-        default='no_urgente_importante'
+        default='no urgente y no importante'
     )
     def __str__(self): 
         return self.title # returns the title of the task
